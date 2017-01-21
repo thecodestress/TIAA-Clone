@@ -1,0 +1,187 @@
+<div class="jumbotron">
+    <form ng-submit="search()">
+        <div class="row" style="background-color: white; padding: 10px;">
+            <div class="col-md-2"><img src="views/images/tiaa_logo.png"/></div>
+            <div class="col-md-5"></div>
+            <div class="col-md-5">
+                <table>
+                    <tr>
+                        <td style="padding: 5px;">
+                            <font size="3">By Transaction Number</font>
+                        </td>
+                        <td style="padding: 5px;">
+                            <input ng-model="TRN" type="text" class="form-control" placeholder="Search...">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </form>
+
+    <div class="row" style="background-color: #34a3d6;">
+        <div class="col-md-3" style="padding-left: 20px;">
+            <h2>
+                <font color="white">Overview</font>
+            </h2>
+            <h2>
+                <font color="white">${{total_cash}}</font>
+                <font color="white" size="3">Cash</font>
+            </h2>
+            <h2>
+                <font color="white">${{total_average}}</font>
+                <font color="white" size="3">Average</font>
+            </h2>
+            <h2>
+                <font color="white">{{total_transaction}}</font>
+                <font color="white" size="3">Transactions</font>
+            </h2>
+        </div>
+        <div class="col-md-9">
+            <!-- Line Chart Here -->
+            <div class="line-graph">
+                <svg id="line-viz"></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="background-color: #34a3d6; padding-bottom: 30px;">
+        <div class="col-md-7" style="padding-right: 0px;">
+            <div style="background-color: #5eafd7;">
+                <font size="5" color="white" style="padding: 10px;">Category
+                    <font size="3" color="white">(Select a Liquid Gauge for information)</font>
+                </font>
+                <br/><br/>
+                <div id="gauge_display" style="padding-left: 10px;">
+                    <svg ng-click="select_gauge('fillgauge1', '#f5a623')" id="fillgauge1" width="32%" height="80%"></svg>
+                    <svg ng-click="select_gauge('fillgauge2', '#7BD500')" id="fillgauge2" width="32%" height="80%"></svg>
+                    <svg ng-click="select_gauge('fillgauge3', '#C91090')" id="fillgauge3" width="32%" height="80%"></svg>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5" style="padding-left: 0px;">
+            <div style="background-color: #5eafd7; height: 210px;">
+                <font size="5" color="white" style="padding: 10px;">Trancode
+                    <font size="3" color="white">(Select for Corresponding Activity)</font>
+                </font>
+                <br/><br/>
+                <div style="padding-right: 10px; padding-left: 10px;">
+                    <table style="width: 100%; background-color: #178BCA;">
+                        <tr>
+                            <td>
+                                <table id="tran_table_left" style="width: 100%;">
+                                    <tr ng-repeat="trancode in trancodes_left" style="text-align: center;">
+                                        <td id="tran_{{trancode.id}}" class="hover" ng-click="select_trancode(trancode.id)" style="text-align: center; padding: 8px; border: 1px solid #5EAFD7">
+                                            <font color="white">{{trancode.description}}</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table id="tran_table_right" style="width: 100%;">
+                                    <tr ng-repeat="trancode in trancodes_right" style="text-align: center;">
+                                        <td id="tran_{{trancode.id}}" class="hover" ng-click="select_trancode(trancode.id)" style="text-align: center; padding: 8px; border: 1px solid #5EAFD7">
+                                            <font color="white">{{trancode.description}}</font>
+                                        </td>
+                                    </tr>
+                                    <tr ng-if="stub" style="text-align: center;">
+                                        <td style="text-align: center; padding: 8px; border: 1px solid #5EAFD7">
+                                            <font color="#178BCA">|</font>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3" ng-show="display" style="padding-right: 0px;">
+            <div style="background-color: #5eafd7; height: 250px;">
+                <div id="infoBox" ng-show="rect_display" style="padding: 10px;">
+                    <table>
+                        <tr style="border-bottom: 1px solid #fff;">
+                            <td colspan="2" style="padding: 10px; text-align: center;"><font color="white">{{category}}</font></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px;"><font color="white">Total:</font></td>
+                            <td style="padding: 9px;"><font color="white">${{total}}</font></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px;"><font color="white">Average:</font></td>
+                            <td style="padding: 9px;"><font color="white">${{average}}</font></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px;"><font color="white">Maximum:</font></td>
+                            <td style="padding: 9px;"><font color="white">${{max}}</font></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px;"><font color="white">Minimum:</font></td>
+                            <td style="padding: 9px;"><font color="white">${{min}}</font></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 9px;"><font color="white">Transaction:</font></td>
+                            <td style="padding: 9px;"><font color="white">{{trans}}</font></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4" ng-show="display" style="padding-left: 0px; padding-right: 0px;">
+            <div style="background-color: #5eafd7; height: 250px;">
+                <div ng-show="rect_display">
+                    <div id="rect_display" style="padding: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5" ng-show="display" style="padding-left: 0px;">
+            <div style="background-color: #5eafd7; height: 250px;">
+                <div ng-show="tran_display">
+                    <div id="tran_display" style="padding: 10px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="padding-top: 15px;">
+            <font size="3" color="white">Data is being pulled from {{database}} cloud based service</font>
+            <br/>
+            <font size="3" color="white">Page Load Time: {{timer}} seconds</font>
+        </div>
+    </div>
+
+    <modal visible="showModal">
+        <ul class="bottom" style="list-style-type: none;">
+            <li ng-repeat="trn in transactions">
+                <table style="width: 50%">
+                    <tr>
+                        <td><font color="005597">Trade Date:</font></td>
+                        <td><font color="005597">{{trn.TRADE_DATE}}</font></td>
+                    </tr>
+                    <tr>
+                        <td><font color="005597">Category:</font></td>
+                        <td><font color="005597">{{trn.CATEGORY}}</font></td>
+                    </tr>
+                    <tr>
+                        <td><font color="005597">Subcategory:</font></td>
+                        <td><font color="005597">{{trn.SUB_CATEGORY}}</font></td>
+                    </tr>
+                    <tr>
+                        <td><font color="005597">Cash:</font></td>
+                        <td><font color="005597">{{trn.CASH}}</font></td>
+                    </tr>
+                </table>
+                <br/>
+            </li>
+        </ul>
+        <ul style="list-style-type: none;">
+            <li>
+                <table style="width: 45%">
+                    <tr>
+                        <td><font color="005597">Cash Total:</font></td>
+                        <td><font color="005597">{{searchTotal}}</font></td>
+                    </tr>
+                </table>
+            </li>
+        </ul>
+    </modal>
+</div>

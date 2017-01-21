@@ -1,0 +1,17 @@
+#gauge_display svg {
+    cursor: pointer;
+}
+
+.bottom {
+    border-bottom: 1px solid #ccc;
+}
+
+.hover:hover {
+    cursor: pointer;
+    background-color: #f5a623;
+}
+
+.selected {
+    cursor: pointer;
+    background-color: #f5a623;
+}

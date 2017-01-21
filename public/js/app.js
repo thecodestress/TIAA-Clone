@@ -1,0 +1,12 @@
+angular.module('visuarchApp',
+    [
+        'ngRoute',
+        'appRoutes',
+        'MainCtrl',
+        'MongoCtrl',
+        'FirebaseCtrl',
+        'CouchCtrl',
+        'TiaaService',
+        'TiaaDirective'
+    ]
+);
