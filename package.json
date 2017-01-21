@@ -1,0 +1,15 @@
+{
+	"name": "visuarch",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"body-parser": "~1.13.1",
+		"express": "~4.13.1",
+		"firebase": "~2.4.1",
+		"method-override": "~2.3.3",
+		"mongoose": "~4.2.3",
+		"nano": "~6.2.0"
+	}
+}
